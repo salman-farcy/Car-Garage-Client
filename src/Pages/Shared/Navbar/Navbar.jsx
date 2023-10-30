@@ -1,9 +1,23 @@
 import { Link, NavLink } from "react-router-dom";
 import logo from '../../../assets/logo.svg'
+import { useContext } from "react";
+import { AuthContext } from "../../../Provider/AuthProvider";
 
 
 
 const Navbar = () => {
+     const { user, logOut } = useContext(AuthContext)
+
+     const handleLogOut = () => {
+          logOut()
+               .then(() => { 
+                    alert('ar you sure you loge Out')
+               })
+               .catch(error => console.log(error))
+     }
+
+
+
 
      const navlinks = <>
           <li className=""><NavLink
@@ -24,14 +38,30 @@ const Navbar = () => {
                About
           </NavLink></li>
 
-          <li><NavLink
-               to="/login"
-               className={({ isActive, isPending }) =>
-                    isPending ? "pending" : isActive ? "active" : ""
-               }
-          >
-               Login
-          </NavLink></li>
+
+          {
+               user?.email ? <>
+                    <li><button onClick={handleLogOut} >Log out</button> </li>
+                    <li><NavLink
+                         to="/bookings"
+                         className={({ isActive, isPending }) =>
+                              isPending ? "pending" : isActive ? "active" : ""
+                         }
+                    >
+                         bookings
+                    </NavLink></li>
+               </>
+
+                    : <li><NavLink
+                         to="/login"
+                         className={({ isActive, isPending }) =>
+                              isPending ? "pending" : isActive ? "active" : ""
+                         }
+                    >
+                         Login
+                    </NavLink></li>
+          }
+
 
 
           <li><NavLink
